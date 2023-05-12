@@ -7,7 +7,7 @@ public class createConncection {
   static final String DB_URL = "jdbc:mysql://localhost/dhruv";
 
   static final String USER = "root";
-  static final String PASS = "2642@bhavanikrupa";
+  static final String PASS = "********";
 
   public static Connection getCon() {
     try {

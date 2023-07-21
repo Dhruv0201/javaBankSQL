@@ -7,12 +7,13 @@ public class createConncection {
   static final String DB_URL = "jdbc:mysql://localhost/dhruv";
 
   static final String USER = "root";
-  static final String PASS = "********";
+  static final String PASS = "*******";
 
   public static Connection getCon() {
     try {
       Class.forName(JDBC_DRIVER);
       con = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println(con);
       if (con != null) {
         System.out.println("Conncetion Succeed");
       }

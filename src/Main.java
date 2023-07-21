@@ -1,86 +1,99 @@
 import java.sql.*;
 import java.util.Scanner;
+
 public class Main {
 
-    public static void main(String[] args) {
-        try{
-            Scanner sc = new Scanner(System.in);
-            System.out.println("\tWelcome To Our Bank!!!");
-            System.out.println("\t Are you A?");
-            while (true) {
-                int mainmenuans = mainMenu();
-                if (mainmenuans == 1) {
-                    System.out.println("\tI want to:");
-                    System.out.println();
-                    System.out.println("\t\t1.Login for credit debit or transfer");
-                    System.out.println("\t\t2.Check balance");
-                    System.out.println("\t\tType 1 or 2 for procceding");
-                    int mainchoice = sc.nextInt();
-                    if (mainchoice == 1) {
-                        User loggedin = Bank.login();
-                        if (loggedin == null) continue;
-                        System.out.println();
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
 
-                        System.out.println("I want to :");
-                        System.out.println();
-                        System.out.println("\t\t1.Credit");
-                        System.out.println("\t\t2.Debit");
-                        System.out.println("\t\t3.Transfer");
-                        int choice = sc.nextInt();
-                        sc.nextLine();
-                        if (choice == 1) {
-                            Bank.credit(loggedin);
-                        } else if (choice == 2) {
-                            Bank.debit(loggedin);
-                        } else if (choice == 3) {
-                            Bank.transfer(loggedin);
-                        }
-                        if (gotoMainmenu()) {
-                            continue;
-                        } else break;
-                    } else if (mainchoice == 2) {
-                        User s = Bank.login();
-                        if (s == null) {
-                            continue;
-                        }
+    while (true) {
+      int mainmenuans = mainMenu();
+      switch (mainmenuans) {
+        case 1:
+          handleBankOperations(sc);
+          break;
+        case 2:
+          System.out.println("Open Your Account Today");
+          Bank.createAuser();
+          break;
+        default:
+          System.out.println("Invalid choice. Please try again.");
+      }
 
-                        System.out.println(s.getbalance());
-                        if (gotoMainmenu()) {
-                            continue;
-                        } else break;
-                    }
-                } else if (mainmenuans == 2) {
-                    System.out.println("Open Yout Account Today");
-                    Bank.createAuser();
-                    if (gotoMainmenu()) {
-                        continue;
-                    } else {
-                        break;
-                    }
-                }
-            }
+      if (!gotoMainmenu()) {
+        break;
+      }
+    }
 
+    sc.close();
+  }
+
+  public static int mainMenu() {
+    System.out.println("\tWelcome to Our Bank");
+    System.out.println();
+    System.out.println("\tChoose from the following:");
+    System.out.println("\t\t1. Existing User");
+    System.out.println("\t\t2. New User");
+    System.out.println("\t\tType 1 or 2 for proceeding");
+    Scanner sc = new Scanner(System.in);
+    return sc.nextInt();
+  }
+
+  public static boolean gotoMainmenu() {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("\nDo you want to go back to the main menu? (Y/N)");
+    String choice = sc.next();
+    return choice.equalsIgnoreCase("Y");
+  }
+
+  public static void handleBankOperations(Scanner sc) {
+    System.out.println("\tI want to:");
+    System.out.println();
+    System.out.println("\t\t1. Login for credit, debit, or transfer");
+    System.out.println("\t\t2. Check balance");
+    System.out.println("\t\tType 1 or 2 for proceeding");
+    int mainchoice = sc.nextInt();
+
+    switch (mainchoice) {
+      case 1:
+        User loggedin = Bank.login();
+        if (loggedin != null) {
+          handleLoggedInUser(sc, loggedin);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        break;
+      case 2:
+        User s = Bank.login();
+        if (s != null) {
+          System.out.println(s.getbalance());
         }
+        break;
+      default:
+        System.out.println("Invalid choice. Please try again.");
     }
-    public static int mainMenu() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\t\t 1.Exisisting Costumer?");
-        System.out.println("\t\t 2.New Costumer?");
-        System.out.println();
-        System.out.println("\t\t press 1 or 2 for selcting");
-        int ans = sc.nextInt();
-        return ans;
-    }
+  }
 
-    public static boolean gotoMainmenu() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println(
-                "\t\t type \"Back\" for mainmenu or type \"Exit\" for logout "
-        );
-        String st = sc.nextLine();
-        if (st.equals("Back")) return true; else return false;
+  public static void handleLoggedInUser(Scanner sc, User loggedin) {
+    System.out.println();
+    System.out.println("I want to:");
+    System.out.println();
+    System.out.println("\t\t1. Credit");
+    System.out.println("\t\t2. Debit");
+    System.out.println("\t\t3. Transfer");
+    int choice = sc.nextInt();
+    sc.nextLine();
+
+    switch (choice) {
+      case 1:
+        Bank.credit(loggedin);
+        break;
+      case 2:
+        Bank.debit(loggedin);
+        break;
+      case 3:
+        Bank.transfer(loggedin);
+        break;
+      default:
+        System.out.println("Invalid choice. Please try again.");
     }
+  }
 }
